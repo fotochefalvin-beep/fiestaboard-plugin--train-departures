@@ -18,14 +18,18 @@ NEXT 08:44
   scheduled time + delay already past) are never shown.
 - The shown train is the one that will **actually** leave first: an 08:14
   train running +35 is shown after an on-time 08:44.
-- A train stays on the board until it departs, even if you can no longer
-  catch it.
+- With a **walk time** set, a train is dropped once you can no longer
+  catch it: when scheduled time + delay − walk time is past. With a 10-minute
+  walk, an on-time 08:26 makes way for the next train just after 08:16;
+  running +5, just after 08:21 (at the first refresh past that time). With 0
+  (the default) a train stays until it departs.
 
 When iRail cannot be reached (timeout, connection error, HTTP error, bad
 answer), `status` becomes `NO TRAIN DATA` and the train fields are empty,
 instead of showing stale times; the next good answer brings `OK` back. When
 iRail answers but no direct train is among the results, `status` is
-`NO DIRECT TRAIN`.
+`NO DIRECT TRAIN`; with a walk time this also covers direct trains that are all
+too close to catch.
 
 ## Setup
 
@@ -49,6 +53,7 @@ iRail answers but no direct train is among the results, `status` is
 | `from_label` | empty | Short board name (`GENT`). Empty: the station's first standard name, cut to 15 characters. |
 | `to_label` | empty | Short board name (`BRUSSEL-C`). Same fallback. |
 | `language` | `nl` | `en`, `nl`, `fr` or `de`: the language iRail uses for the destination names (`LUIK-GUILLEMINS` in `nl`, `LIEGE-GUILLEMIN` in `fr`). Labels are not affected. |
+| `walk_minutes` | 0 | Whole minutes from home to the platform, 0 to 60. A train you can no longer catch (scheduled time + delay − walk time past) is not shown, neither as `time` nor as `next_time`. |
 | `refresh_seconds` | 60 | How often to ask iRail; at least 30. |
 
 If iRail stops knowing a station from the bundled list, the plugin reports a
@@ -65,7 +70,7 @@ Every value is upper-case ASCII, accents stripped, at most 15 characters
 | `route` | `<from_label>><to_label>`, cut to 15 | `GENT>BRUSSEL-C` |
 | `from_label` | from the setting | `GENT` |
 | `to_label` | from the setting | `BRUSSEL-C` |
-| `time` | scheduled departure, local `HH:MM` | `08:14` |
+| `time` | scheduled departure, local `HH:MM`, of the next train you can still catch | `08:14` |
 | `delay` | `+N` whole minutes; empty when on time | `+12` |
 | `platform` | `P` + platform; empty when unknown | `P4` |
 | `destination` | where that train ends (iRail's direction, in the `language` setting), cut to 15; empty when iRail gives none | `EUPEN` |

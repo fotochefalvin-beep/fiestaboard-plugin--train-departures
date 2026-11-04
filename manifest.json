@@ -1,7 +1,7 @@
 {
   "id": "train_departures",
   "name": "Train Departures",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "The next direct NMBS/SNCB train on your route with its delay, platform and final destination (08:14 +12 P4), plus the one after, live from iRail.",
   "author": "Alvin To",
   "icon": "train-front",
@@ -71,6 +71,14 @@
         ],
         "default": "nl"
       },
+      "walk_minutes": {
+        "type": "integer",
+        "title": "Walk time (minutes)",
+        "description": "Minutes you need to reach the platform. A train you can no longer catch is dropped from the board this long before it departs (delay included). 0: shown until it departs.",
+        "default": 0,
+        "minimum": 0,
+        "maximum": 60
+      },
       "refresh_seconds": {
         "type": "integer",
         "title": "Refresh Interval (seconds)",
@@ -126,7 +134,7 @@
         "example": "BRUSSEL-C"
       },
       "time": {
-        "description": "Scheduled departure (HH:MM, local time) of the next direct train that has not left",
+        "description": "Scheduled departure (HH:MM, local time) of the next direct train you can still catch",
         "type": "string",
         "max_length": 15,
         "group": "next_train",

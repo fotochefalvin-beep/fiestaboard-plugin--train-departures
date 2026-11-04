@@ -68,6 +68,18 @@ def test_unsupported_language_is_rejected_offline(plugin, no_network, language):
     assert plugin.validate_config(config(language=language)) == ["Language must be one of en, nl, fr, de"]
 
 
+@pytest.mark.parametrize("walk", [None, 0, 10, 60])
+def test_walk_time_in_range_is_accepted(plugin, walk):
+    assert plugin.validate_config(config(walk_minutes=walk)) == []
+
+
+@pytest.mark.parametrize("walk", [-1, 61, 10.5, 10.0, "10", True, [10]])
+def test_walk_time_out_of_range_or_not_whole_is_rejected(plugin, walk):
+    assert plugin.validate_config(config(walk_minutes=walk)) == [
+        "Walk time must be a whole number of minutes from 0 to 60"
+    ]
+
+
 def host_validation(plugin, cfg):
     """What the registry runs on save: the base refresh check, then the plugin's."""
     return plugin._validate_refresh_seconds(cfg) + plugin.validate_config(cfg)
@@ -198,7 +210,10 @@ def test_manifest_declares_eleven_variables_of_15(manifest):
     assert props["language"]["enum"] == ["en", "nl", "fr", "de"]
     assert len(props["language"]["enumNames"]) == 4
     assert props["language"]["default"] == "nl"
-    assert manifest["version"] == "0.2.0"
+    walk = props["walk_minutes"]
+    assert (walk["type"], walk["default"], walk["minimum"], walk["maximum"]) == ("integer", 0, 0, 60)
+    assert "walk_minutes" not in manifest["settings_schema"]["required"]
+    assert manifest["version"] == "0.3.0"
     for key in ("from_station", "to_station"):
         assert props[key]["ui:widget"] == "remote-options"
         assert props[key]["ui:options"]["server_search"] is True

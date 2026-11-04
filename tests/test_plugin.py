@@ -21,6 +21,10 @@ def ok(*connections):
     return FakeResponse(200, body(*connections))
 
 
+#: CAP-3 tests run with the walk time unset and set to 0: both are story 1's rule.
+NO_WALK = pytest.mark.parametrize("walk", [None, {"walk_minutes": 0}], ids=["walk-unset", "walk-0"])
+
+
 def fetch(make_plugin, *answers, config=None):
     session = FakeSession(*answers)
     plugin = make_plugin(session, config)
@@ -137,17 +141,19 @@ def test_invalid_stored_language_falls_back_to_nl(make_plugin):
 # CAP-3 --------------------------------------------------------------------------
 
 
-def test_delayed_train_is_replaced_by_one_that_leaves_first(make_plugin):
-    result, _, _ = fetch(make_plugin, ok(connection("08:14", 35), connection("08:44")))
+@NO_WALK
+def test_delayed_train_is_replaced_by_one_that_leaves_first(make_plugin, walk):
+    result, _, _ = fetch(make_plugin, ok(connection("08:14", 35), connection("08:44")), config=walk)
     d = result.data
     assert (d["time"], d["delay"]) == ("08:44", "")
     assert (d["next_time"], d["next_delay"]) == ("08:14", "+35")
 
 
+@NO_WALK
 @pytest.mark.parametrize("seconds, expected", [(0, "08:26"), (30, "08:39")])
-def test_departure_edge(make_plugin, now_holder, seconds, expected):
+def test_departure_edge(make_plugin, now_holder, seconds, expected, walk):
     now_holder["now"] = at("08:26", seconds)
-    result, _, _ = fetch(make_plugin, ok(connection("08:26"), connection("08:39")))
+    result, _, _ = fetch(make_plugin, ok(connection("08:26"), connection("08:39")), config=walk)
     assert result.data["time"] == expected
 
 
@@ -161,14 +167,16 @@ def test_departure_edge(make_plugin, now_holder, seconds, expected):
     ],
     ids=["cancelled", "via", "departed", "left"],
 )
-def test_skipped_connections_are_never_chosen(make_plugin, skipped):
-    result, _, _ = fetch(make_plugin, ok(skipped, connection("08:30")))
+@NO_WALK
+def test_skipped_connections_are_never_chosen(make_plugin, skipped, walk):
+    result, _, _ = fetch(make_plugin, ok(skipped, connection("08:30")), config=walk)
     assert result.data["time"] == "08:30"
     assert result.data["next_time"] == ""
 
 
-def test_delayed_train_still_to_leave_stays(make_plugin):
-    result, _, _ = fetch(make_plugin, ok(connection("07:55", 10), connection("08:30")))
+@NO_WALK
+def test_delayed_train_still_to_leave_stays(make_plugin, walk):
+    result, _, _ = fetch(make_plugin, ok(connection("07:55", 10), connection("08:30")), config=walk)
     assert (result.data["time"], result.data["delay"]) == ("07:55", "+10")
 
 
@@ -176,6 +184,60 @@ def test_same_vehicle_and_time_is_shown_once(make_plugin):
     twin = connection("08:14", vehicle="BE.NMBS.IC1")
     result, _, _ = fetch(make_plugin, ok(twin, dict(twin)))
     assert result.data["next_time"] == ""
+
+
+# walk time ----------------------------------------------------------------------
+
+WALK_10 = {"walk_minutes": 10}
+
+
+@pytest.mark.parametrize(
+    "hhmm, seconds, delay_min, expected",
+    [
+        ("08:15", 59, 0, "08:26"),
+        ("08:16", 0, 0, "08:26"),
+        ("08:16", 30, 0, "08:39"),
+        ("08:21", 0, 5, "08:26"),
+        ("08:21", 30, 5, "08:39"),
+    ],
+    ids=["on-time-shown", "on-time-edge", "on-time-gone", "delayed-shown", "delayed-gone"],
+)
+def test_walk_time_drops_a_train_you_cannot_catch(make_plugin, now_holder, hhmm, seconds, delay_min, expected):
+    now_holder["now"] = at(hhmm, seconds)
+    result, _, _ = fetch(make_plugin, ok(connection("08:26", delay_min), connection("08:39")), config=WALK_10)
+    assert result.data["time"] == expected
+
+
+def test_walk_time_shifts_next_time_too(make_plugin):
+    trains = ok(connection("08:05"), connection("08:30"), connection("08:45"))
+    without, _, _ = fetch(make_plugin, trains)
+    assert (without.data["time"], without.data["next_time"]) == ("08:05", "08:30")
+    walking, _, _ = fetch(make_plugin, trains, config=WALK_10)
+    assert (walking.data["time"], walking.data["next_time"]) == ("08:30", "08:45")
+
+
+def test_next_time_skips_a_train_catchable_only_without_walk_time(make_plugin):
+    trains = ok(connection("08:30"), connection("08:05"))
+    without, _, _ = fetch(make_plugin, trains)
+    assert without.data["next_time"] == "08:30"
+    walking, _, _ = fetch(make_plugin, trains, config=WALK_10)
+    assert (walking.data["time"], walking.data["next_time"]) == ("08:30", "")
+
+
+def test_walk_time_still_skips_cancelled_trains(make_plugin):
+    result, _, _ = fetch(make_plugin, ok(connection("08:30", canceled=True), connection("08:45")), config=WALK_10)
+    assert (result.data["time"], result.data["next_time"]) == ("08:45", "")
+
+
+def test_no_catchable_train_is_no_direct_train(make_plugin):
+    result, _, _ = fetch(make_plugin, ok(connection("08:05")), config=WALK_10)
+    assert result.data["status"] == "NO DIRECT TRAIN"
+
+
+@pytest.mark.parametrize("walk", [-1, 61, 10.5, "10", True])
+def test_invalid_stored_walk_time_counts_as_zero(make_plugin, walk):
+    result, _, _ = fetch(make_plugin, ok(connection("08:05"), connection("08:30")), config={"walk_minutes": walk})
+    assert result.data["time"] == "08:05"
 
 
 # statuses -----------------------------------------------------------------------

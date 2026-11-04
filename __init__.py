@@ -1,7 +1,8 @@
 """Train Departures: the next direct NMBS/SNCB train on one route.
 
 Every refresh reads iRail ``/connections`` for the configured from/to
-stations and shows the next direct train that has not left yet, with its
+stations and shows the next direct train that can still be caught (it has
+not left, and the walk to the station still fits before it does), with its
 delay, platform and final destination, plus the train after it. Stations are checked and
 searched offline against a bundled iRail ``/stations`` snapshot
 (``stations.json``), so saving settings never touches the network.
@@ -40,6 +41,9 @@ FALLBACK_TZ = "Europe/Brussels"
 #: fields, so the to-station picker asks for the same list under its own id.
 STATIONS_OPTIONS_IDS = ("stations", "to_stations")
 
+#: Upper bound of the ``walk_minutes`` setting.
+MAX_WALK_MINUTES = 60
+
 STATUS_OK = "OK"
 STATUS_NO_DATA = "NO TRAIN DATA"
 STATUS_NO_DIRECT = "NO DIRECT TRAIN"
@@ -56,18 +60,19 @@ def board_text(value: Any, limit: int = MAX_LEN) -> str:
     return text[:limit].rstrip()
 
 
-def select_trains(connections: List[irail.Connection], now: float) -> List[irail.Connection]:
-    """Direct trains still to leave, the one that actually leaves first first.
+def select_trains(connections: List[irail.Connection], now: float, walk_seconds: int = 0) -> List[irail.Connection]:
+    """Direct trains still to catch, the one that actually leaves first first.
 
-    Drops connections with vias, cancelled ones and ones that left
-    (``left`` flag, or scheduled time + delay already past), dedupes by
-    (vehicle, time), then sorts by expected departure, then scheduled time.
+    Drops connections with vias, cancelled ones and ones that count as
+    departed (``left`` flag, or scheduled time + delay - *walk_seconds*
+    already past), dedupes by (vehicle, time), then sorts by expected
+    departure, then scheduled time.
     """
     usable: Dict[Tuple[str, int], irail.Connection] = {}
     for conn in connections:
         if not conn.direct or conn.canceled or conn.left:
             continue
-        if conn.time + conn.delay < now:
+        if conn.time + conn.delay - walk_seconds < now:
             continue
         usable.setdefault((conn.vehicle, conn.time), conn)
     return sorted(usable.values(), key=lambda c: (c.time + c.delay, c.time))
@@ -102,6 +107,11 @@ def local_zone() -> ZoneInfo:
     return ZoneInfo(FALLBACK_TZ)
 
 
+def valid_walk_minutes(value: Any) -> bool:
+    """A whole number of minutes in 0..60; ``True`` and ``10.0`` are not."""
+    return type(value) is int and 0 <= value <= MAX_WALK_MINUTES
+
+
 def unknown_station_message(index: stations.StationIndex, value: str) -> str:
     suggestion = index.suggest(value)
     message = f"unknown station '{value}'"
@@ -130,7 +140,7 @@ class Plugin(PluginBase):
         return stations.load_index()
 
     def validate_config(self, config: Dict[str, Any]) -> List[str]:
-        """Offline: stations against the bundled snapshot, labels' type.
+        """Offline: stations against the bundled snapshot, labels' type, walk time.
 
         ``refresh_seconds`` is checked by the host first, against the
         manifest's ``min_refresh_seconds`` (30).
@@ -157,6 +167,9 @@ class Plugin(PluginBase):
         language = config.get("language")
         if language is not None and language not in irail.LANGUAGES:
             errors.append(f"Language must be one of {', '.join(irail.LANGUAGES)}")
+        walk = config.get("walk_minutes")
+        if walk is not None and not valid_walk_minutes(walk):
+            errors.append(f"Walk time must be a whole number of minutes from 0 to {MAX_WALK_MINUTES}")
         return errors
 
     def on_config_change(self, old_config: Dict[str, Any], new_config: Dict[str, Any]) -> None:
@@ -189,6 +202,10 @@ class Plugin(PluginBase):
     def _language(self) -> str:
         value = self.config.get("language")
         return value if value in irail.LANGUAGES else irail.DEFAULT_LANGUAGE
+
+    def _walk_seconds(self) -> int:
+        value = self.config.get("walk_minutes")
+        return value * 60 if valid_walk_minutes(value) else 0
 
     def _get_client(self) -> irail.IRailClient:
         if self._client is None:
@@ -231,7 +248,7 @@ class Plugin(PluginBase):
             data["status"] = STATUS_NO_DATA
             return PluginResult(available=True, data=data)
 
-        trains = select_trains(connections, self._now())
+        trains = select_trains(connections, self._now(), self._walk_seconds())
         if not trains:
             data["status"] = STATUS_NO_DIRECT
             return PluginResult(available=True, data=data)
