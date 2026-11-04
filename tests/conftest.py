@@ -37,8 +37,12 @@ def at(hhmm, seconds=0):
     return datetime(2026, 11, 4, hour, minute, seconds, tzinfo=BRUSSELS).timestamp()
 
 
-def connection(hhmm, delay_min=0, platform="4", canceled=False, left=False, vias=False, vehicle=None):
-    """One connection, shaped like the first record of the recorded answer."""
+def connection(hhmm, delay_min=0, platform="4", canceled=False, left=False, vias=False, vehicle=None, destination=None):
+    """One connection, shaped like the first record of the recorded answer.
+
+    *destination* replaces ``departure.direction.name`` when given; the
+    recorded one (``Liège-Guillemins``) stays otherwise.
+    """
     item = copy.deepcopy(load_fixture("connections_gent_brussel.json")["connection"][0])
     item.pop("vias", None)
     dep = item["departure"]
@@ -48,6 +52,8 @@ def connection(hhmm, delay_min=0, platform="4", canceled=False, left=False, vias
     dep["canceled"] = "1" if canceled else "0"
     dep["left"] = "1" if left else "0"
     dep["vehicle"] = vehicle or f"BE.NMBS.IC{hhmm.replace(':', '')}"
+    if destination is not None:
+        dep["direction"] = {"name": destination}
     if vias:
         item["vias"] = copy.deepcopy(load_fixture("connections_gent_brussel.json")["connection"][2]["vias"])
     return item

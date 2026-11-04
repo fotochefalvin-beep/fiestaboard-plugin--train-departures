@@ -2,13 +2,14 @@
 
 Every refresh reads iRail ``/connections`` for the configured from/to
 stations and shows the next direct train that has not left yet, with its
-delay and platform, plus the train after it. Stations are checked and
+delay, platform and final destination, plus the train after it. Stations are checked and
 searched offline against a bundled iRail ``/stations`` snapshot
 (``stations.json``), so saving settings never touches the network.
 
 Variables (all upper-case ASCII, at most 15 characters, for a 3 x 15 Note):
 ``status``, ``route``, ``from_label``, ``to_label``, ``time``, ``delay``,
-``platform``, ``next_time``, ``next_delay``.
+``platform``, ``destination``, ``next_time``, ``next_delay``,
+``next_destination``.
 """
 
 from __future__ import annotations
@@ -43,7 +44,7 @@ STATUS_OK = "OK"
 STATUS_NO_DATA = "NO TRAIN DATA"
 STATUS_NO_DIRECT = "NO DIRECT TRAIN"
 
-TRAIN_FIELDS = ("time", "delay", "platform", "next_time", "next_delay")
+TRAIN_FIELDS = ("time", "delay", "platform", "destination", "next_time", "next_delay", "next_destination")
 STATION_FIELDS = (("from_station", "From station"), ("to_station", "To station"))
 
 
@@ -153,6 +154,9 @@ class Plugin(PluginBase):
             value = config.get(key)
             if value is not None and not isinstance(value, str):
                 errors.append(f"{title} must be text")
+        language = config.get("language")
+        if language is not None and language not in irail.LANGUAGES:
+            errors.append(f"Language must be one of {', '.join(irail.LANGUAGES)}")
         return errors
 
     def on_config_change(self, old_config: Dict[str, Any], new_config: Dict[str, Any]) -> None:
@@ -182,6 +186,10 @@ class Plugin(PluginBase):
         text = board_text(value) if isinstance(value, str) else ""
         return text or board_text(station.first_name)
 
+    def _language(self) -> str:
+        value = self.config.get("language")
+        return value if value in irail.LANGUAGES else irail.DEFAULT_LANGUAGE
+
     def _get_client(self) -> irail.IRailClient:
         if self._client is None:
             self._client = self.client_factory()
@@ -209,7 +217,7 @@ class Plugin(PluginBase):
         data.update({field: "" for field in TRAIN_FIELDS})
 
         try:
-            connections = self._get_client().connections(from_st.id, to_st.id)
+            connections = self._get_client().connections(from_st.id, to_st.id, lang=self._language())
         except irail.StationNotFound as exc:
             gone = {"from": [from_st], "to": [to_st]}.get(exc.parameter or "", [from_st, to_st])
             names = " or ".join(f"'{s.standardname}'" for s in gone)
@@ -234,7 +242,17 @@ class Plugin(PluginBase):
             return datetime.fromtimestamp(conn.time, zone).strftime("%H:%M")
 
         first = trains[0]
-        data.update(time=hhmm(first), delay=format_delay(first.delay), platform=format_platform(first.platform))
+        data.update(
+            time=hhmm(first),
+            delay=format_delay(first.delay),
+            platform=format_platform(first.platform),
+            destination=board_text(first.destination),
+        )
         if len(trains) > 1:
-            data.update(next_time=hhmm(trains[1]), next_delay=format_delay(trains[1].delay))
+            second = trains[1]
+            data.update(
+                next_time=hhmm(second),
+                next_delay=format_delay(second.delay),
+                next_destination=board_text(second.destination),
+            )
         return PluginResult(available=True, data=data)

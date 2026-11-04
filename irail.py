@@ -27,6 +27,9 @@ USER_AGENT = (
 #: (connect, read) seconds. Every request carries it.
 TIMEOUT = (5, 10)
 RESULTS = 6
+#: iRail ``lang`` values; station names (e.g. a train's destination) come back in it.
+LANGUAGES = ("en", "nl", "fr", "de")
+DEFAULT_LANGUAGE = "nl"
 
 
 class IRailError(Exception):
@@ -57,10 +60,18 @@ class Connection:
     left: bool
     vehicle: str
     direct: bool
+    destination: str = ""  # the train's final stop (``direction.name``), in the request language
 
 
 def _flag(value: Any) -> bool:
     return str(value).strip().lower() in ("1", "true")
+
+
+def _destination(departure: dict) -> str:
+    direction = departure.get("direction")
+    if not isinstance(direction, dict):
+        return ""
+    return str(direction.get("name") or "")
 
 
 def parse_connection(item: dict) -> Connection:
@@ -74,6 +85,7 @@ def parse_connection(item: dict) -> Connection:
         left=_flag(departure.get("left")),
         vehicle=str(departure.get("vehicle") or ""),
         direct="vias" not in item,
+        destination=_destination(departure),
     )
 
 
@@ -105,8 +117,10 @@ class IRailClient:
         self.session = session or requests.Session()
         self.timeout = timeout
 
-    def connections(self, from_id: str, to_id: str, results: int = RESULTS) -> List[Connection]:
-        params = {"from": from_id, "to": to_id, "format": "json", "results": results}
+    def connections(
+        self, from_id: str, to_id: str, results: int = RESULTS, lang: str = DEFAULT_LANGUAGE
+    ) -> List[Connection]:
+        params = {"from": from_id, "to": to_id, "format": "json", "results": results, "lang": lang}
         headers = {"User-Agent": USER_AGENT, "Accept": "application/json"}
         try:
             response = self.session.get(CONNECTIONS_URL, params=params, headers=headers, timeout=self.timeout)

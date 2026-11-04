@@ -1,13 +1,13 @@
 # Train Departures
 
 A [FiestaBoard](https://github.com/Fiestaboard/FiestaBoard) plugin that shows
-the next direct NMBS/SNCB train on your route, with its delay and platform,
-plus the train after it. Times come from [iRail](https://api.irail.be)
+the next direct NMBS/SNCB train on your route, with its delay, platform and
+final destination, plus the train after it. Times come from [iRail](https://api.irail.be)
 `/connections` (free, no key) and are refreshed all day.
 
 ```
-GENT>BRUSSEL-C
 08:14 +12   P4
+EUPEN
 NEXT 08:44
 ```
 
@@ -33,7 +33,8 @@ iRail answers but no direct train is among the results, `status` is
 2. Pick the **From station** and **To station**: start typing to search the
    station list (Dutch, French, English or German names all work, e.g.
    `Gent-Sint-Pieters`, `Brussel-Centraal`, `Bruxelles-Central`).
-3. Optionally set short **labels** for the board, then enable the plugin.
+3. Optionally set short **labels** for the board and the **language** of the
+   destination names, then enable the plugin.
 4. Make sure FiestaBoard's general timezone setting is `Europe/Brussels`
    (a fresh install defaults to `America/Los_Angeles`, which would show the
    times nine hours off).
@@ -47,6 +48,7 @@ iRail answers but no direct train is among the results, `status` is
 | `to_station` | – | As above. Must differ from the from station. |
 | `from_label` | empty | Short board name (`GENT`). Empty: the station's first standard name, cut to 15 characters. |
 | `to_label` | empty | Short board name (`BRUSSEL-C`). Same fallback. |
+| `language` | `nl` | `en`, `nl`, `fr` or `de`: the language iRail uses for the destination names (`LUIK-GUILLEMINS` in `nl`, `LIEGE-GUILLEMIN` in `fr`). Labels are not affected. |
 | `refresh_seconds` | 60 | How often to ask iRail; at least 30. |
 
 If iRail stops knowing a station from the bundled list, the plugin reports a
@@ -59,15 +61,17 @@ Every value is upper-case ASCII, accents stripped, at most 15 characters
 
 | Variable | Values | Example |
 |---|---|---|
-| `status` | `OK`, `NO TRAIN DATA`, `NO DIRECT TRAIN`; the train fields are empty unless `OK` | `OK` |
+| `status` | `OK`, `NO TRAIN DATA`, `NO DIRECT TRAIN`; the train fields (`time` to `next_destination`) are empty unless `OK` | `OK` |
 | `route` | `<from_label>><to_label>`, cut to 15 | `GENT>BRUSSEL-C` |
 | `from_label` | from the setting | `GENT` |
 | `to_label` | from the setting | `BRUSSEL-C` |
 | `time` | scheduled departure, local `HH:MM` | `08:14` |
 | `delay` | `+N` whole minutes; empty when on time | `+12` |
 | `platform` | `P` + platform; empty when unknown | `P4` |
+| `destination` | where that train ends (iRail's direction, in the `language` setting), cut to 15; empty when iRail gives none | `EUPEN` |
 | `next_time` | scheduled departure of the following direct train; empty if none | `08:44` |
 | `next_delay` | as `delay`, for the following train | `+3` |
+| `next_destination` | as `destination`, for the following train | `WELKENRAEDT` |
 
 Times are scheduled times in FiestaBoard's general timezone. A fresh
 FiestaBoard install defaults to `America/Los_Angeles`, so set the general
@@ -78,10 +82,14 @@ shown.
 ### Example Note layout
 
 ```
-{{train_departures.route}}
 {{train_departures.time}} {{train_departures.delay}}   {{train_departures.platform}}
+{{train_departures.destination}}
 NEXT {{train_departures.next_time}}
 ```
+
+The destination is what the station display and platform announcements use to
+name the train. Swap it for `{{train_departures.route}}` if you prefer to see
+your route.
 
 When `status` is not `OK`, show `{{train_departures.status}}` instead.
 

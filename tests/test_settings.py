@@ -58,6 +58,16 @@ def test_labels_must_be_text(plugin):
     assert errors == ["From label must be text", "To label must be text"]
 
 
+@pytest.mark.parametrize("language", ["en", "nl", "fr", "de"])
+def test_supported_languages_are_accepted(plugin, no_network, language):
+    assert plugin.validate_config(config(language=language)) == []
+
+
+@pytest.mark.parametrize("language", ["xx", "NL", "", 1, ["nl"]])
+def test_unsupported_language_is_rejected_offline(plugin, no_network, language):
+    assert plugin.validate_config(config(language=language)) == ["Language must be one of en, nl, fr, de"]
+
+
 def host_validation(plugin, cfg):
     """What the registry runs on save: the base refresh check, then the plugin's."""
     return plugin._validate_refresh_seconds(cfg) + plugin.validate_config(cfg)
@@ -171,17 +181,24 @@ def test_manifest_is_valid_for_the_host(manifest):
     assert ok, errors
 
 
-def test_manifest_declares_nine_variables_of_15(manifest):
+def test_manifest_declares_eleven_variables_of_15(manifest):
     simple = manifest["variables"]["simple"]
     assert set(simple) == {
-        "status", "route", "from_label", "to_label", "time", "delay", "platform", "next_time", "next_delay",
+        "status", "route", "from_label", "to_label", "time", "delay", "platform", "destination",
+        "next_time", "next_delay", "next_destination",
     }
+    assert simple["destination"]["group"] == "next_train"
+    assert simple["next_destination"]["group"] == "following_train"
     assert all(v["max_length"] == 15 for v in simple.values())
     assert manifest["max_lengths"] == {k: 15 for k in simple}
     assert manifest["min_refresh_seconds"] == 30
     props = manifest["settings_schema"]["properties"]
     assert props["refresh_seconds"]["default"] == 60
     assert props["refresh_seconds"]["minimum"] == 30
+    assert props["language"]["enum"] == ["en", "nl", "fr", "de"]
+    assert len(props["language"]["enumNames"]) == 4
+    assert props["language"]["default"] == "nl"
+    assert manifest["version"] == "0.2.0"
     for key in ("from_station", "to_station"):
         assert props[key]["ui:widget"] == "remote-options"
         assert props[key]["ui:options"]["server_search"] is True

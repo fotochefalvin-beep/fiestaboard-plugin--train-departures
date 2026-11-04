@@ -14,7 +14,7 @@ from .conftest import (
     load_fixture,
 )
 
-TRAIN_FIELDS = ("time", "delay", "platform", "next_time", "next_delay")
+TRAIN_FIELDS = ("time", "delay", "platform", "destination", "next_time", "next_delay", "next_destination")
 
 
 def ok(*connections):
@@ -42,7 +42,7 @@ def test_request_uses_station_ids_user_agent_and_timeout(make_plugin):
     _, session, _ = fetch(make_plugin, ok(connection("08:14")))
     call = session.calls[0]
     assert call["url"] == "https://api.irail.be/connections/"
-    assert call["params"] == {"from": GENT, "to": BRUSSEL_C, "format": "json", "results": 6}
+    assert call["params"] == {"from": GENT, "to": BRUSSEL_C, "format": "json", "results": 6, "lang": "nl"}
     ua = call["headers"]["User-Agent"]
     assert "train-departures" in ua and "https://github.com/" in ua and "@" not in ua
     assert call["timeout"]
@@ -75,6 +75,63 @@ def test_recorded_answer_skips_the_via_duplicate(make_plugin, now_holder):
     d = result.data
     assert (d["status"], d["time"], d["delay"], d["platform"]) == ("OK", "14:41", "", "P10")
     assert d["next_time"] == "14:56"
+    assert (d["destination"], d["next_destination"]) == ("LIEGE-GUILLEMIN", "WELKENRAEDT")
+
+
+# destination --------------------------------------------------------------------
+
+
+def test_both_destinations_are_board_text(make_plugin):
+    result, _, _ = fetch(
+        make_plugin,
+        ok(connection("08:14", destination="Liège-Guillemins"), connection("08:44", destination="Eupen")),
+    )
+    d = result.data
+    assert (d["destination"], d["next_destination"]) == ("LIEGE-GUILLEMIN", "EUPEN")
+
+
+@pytest.mark.parametrize(
+    "direction",
+    [None, {}, {"name": ""}, {"name": None}, "Eupen", ["Eupen"], "absent"],
+    ids=["null", "no-name", "empty-name", "null-name", "string", "list", "absent"],
+)
+def test_missing_destination_is_empty_and_harmless(make_plugin, direction):
+    first = connection("08:14", 12, "4")
+    if direction == "absent":
+        del first["departure"]["direction"]
+    else:
+        first["departure"]["direction"] = direction
+    result, _, _ = fetch(make_plugin, ok(first, connection("08:44", destination="Eupen")))
+    d = result.data
+    assert d["destination"] == ""
+    assert (d["status"], d["time"], d["delay"], d["platform"]) == ("OK", "08:14", "+12", "P4")
+    assert (d["next_time"], d["next_destination"]) == ("08:44", "EUPEN")
+
+
+def test_one_direct_train_leaves_next_destination_empty(make_plugin):
+    result, _, _ = fetch(make_plugin, ok(connection("08:14", destination="Eupen"), connection("08:20", vias=True)))
+    assert (result.data["destination"], result.data["next_destination"]) == ("EUPEN", "")
+
+
+def test_destination_follows_the_reordered_trains(make_plugin):
+    result, _, _ = fetch(
+        make_plugin,
+        ok(connection("08:14", 35, destination="Eupen"), connection("08:44", destination="Welkenraedt")),
+    )
+    d = result.data
+    assert (d["time"], d["destination"]) == ("08:44", "WELKENRAEDT")
+    assert (d["next_time"], d["next_destination"]) == ("08:14", "EUPEN")
+
+
+@pytest.mark.parametrize("config, lang", [({}, "nl"), ({"language": "fr"}, "fr"), ({"language": "en"}, "en")])
+def test_language_setting_is_sent_as_lang(make_plugin, config, lang):
+    _, session, _ = fetch(make_plugin, ok(connection("08:14")), config=config)
+    assert session.calls[0]["params"]["lang"] == lang
+
+
+def test_invalid_stored_language_falls_back_to_nl(make_plugin):
+    _, session, _ = fetch(make_plugin, ok(connection("08:14")), config={"language": "xx"})
+    assert session.calls[0]["params"]["lang"] == "nl"
 
 
 # CAP-3 --------------------------------------------------------------------------
@@ -125,7 +182,10 @@ def test_same_vehicle_and_time_is_shown_once(make_plugin):
 
 
 def test_no_direct_train(make_plugin):
-    result, _, _ = fetch(make_plugin, ok(connection("08:14", vias=True), connection("08:20", canceled=True)))
+    result, _, _ = fetch(
+        make_plugin,
+        ok(connection("08:14", vias=True, destination="Eupen"), connection("08:20", canceled=True, destination="Eupen")),
+    )
     assert result.available
     assert result.data["status"] == "NO DIRECT TRAIN"
     assert all(result.data[f] == "" for f in TRAIN_FIELDS)

@@ -1,8 +1,8 @@
 {
   "id": "train_departures",
   "name": "Train Departures",
-  "version": "0.1.0",
-  "description": "The next direct NMBS/SNCB train on your route with its delay and platform (08:14 +12 P4), plus the one after, live from iRail.",
+  "version": "0.2.0",
+  "description": "The next direct NMBS/SNCB train on your route with its delay, platform and final destination (08:14 +12 P4), plus the one after, live from iRail.",
   "author": "Alvin To",
   "icon": "train-front",
   "category": "transit",
@@ -52,6 +52,24 @@
         "title": "To label",
         "description": "Short board name for the to station (e.g. BRUSSEL-C). Empty: the station's name, cut to 15 characters.",
         "default": ""
+      },
+      "language": {
+        "type": "string",
+        "title": "Language",
+        "description": "Language of the train destinations iRail returns (e.g. LUIK-GUILLEMINS in Dutch, LIEGE-GUILLEMIN in French). The labels are not affected.",
+        "enum": [
+          "en",
+          "nl",
+          "fr",
+          "de"
+        ],
+        "enumNames": [
+          "English",
+          "Nederlands",
+          "Français",
+          "Deutsch"
+        ],
+        "default": "nl"
       },
       "refresh_seconds": {
         "type": "integer",
@@ -128,6 +146,13 @@
         "group": "next_train",
         "example": "P4"
       },
+      "destination": {
+        "description": "Final destination of that train, in the Language setting, cut to 15; empty when iRail gives none",
+        "type": "string",
+        "max_length": 15,
+        "group": "next_train",
+        "example": "EUPEN"
+      },
       "next_time": {
         "description": "Scheduled departure of the following direct train; empty if none",
         "type": "string",
@@ -141,6 +166,13 @@
         "max_length": 15,
         "group": "following_train",
         "example": "+3"
+      },
+      "next_destination": {
+        "description": "Final destination of the following train; empty when unknown or none",
+        "type": "string",
+        "max_length": 15,
+        "group": "following_train",
+        "example": "WELKENRAEDT"
       }
     }
   },
@@ -152,7 +184,9 @@
     "time": 15,
     "delay": 15,
     "platform": 15,
+    "destination": 15,
     "next_time": 15,
-    "next_delay": 15
+    "next_delay": 15,
+    "next_destination": 15
   }
 }
