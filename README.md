@@ -34,7 +34,10 @@ iRail answers but no direct train is among the results, `status` is
    station list (Dutch, French, English or German names all work, e.g.
    `Gent-Sint-Pieters`, `Brussel-Centraal`, `Bruxelles-Central`).
 3. Optionally set short **labels** for the board, then enable the plugin.
-4. Build a page from the variables below (there is no default layout).
+4. Make sure FiestaBoard's general timezone setting is `Europe/Brussels`
+   (a fresh install defaults to `America/Los_Angeles`, which would show the
+   times nine hours off).
+5. Build a page from the variables below (there is no default layout).
 
 ## Settings
 
@@ -66,8 +69,10 @@ Every value is upper-case ASCII, accents stripped, at most 15 characters
 | `next_time` | scheduled departure of the following direct train; empty if none | `08:44` |
 | `next_delay` | as `delay`, for the following train | `+3` |
 
-Times are scheduled times in FiestaBoard's general timezone (Europe/Brussels
-when none is set). At night the next train may be tomorrow; only its time is
+Times are scheduled times in FiestaBoard's general timezone. A fresh
+FiestaBoard install defaults to `America/Los_Angeles`, so set the general
+timezone to `Europe/Brussels` in FiestaBoard's general settings; Europe/Brussels
+is used only when that setting is empty or invalid. At night the next train may be tomorrow; only its time is
 shown.
 
 ### Example Note layout

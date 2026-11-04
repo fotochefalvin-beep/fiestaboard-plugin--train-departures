@@ -55,6 +55,13 @@ def test_on_time_train_has_empty_delay_and_missing_platform_is_empty(make_plugin
     assert d["next_delay"] == "+3"
 
 
+@pytest.mark.parametrize("platform", ["→", "  ", "?", ""])
+def test_platform_with_nothing_printable_is_empty(platform):
+    from plugins.train_departures import format_platform
+
+    assert format_platform(platform) == ""
+
+
 def test_only_one_direct_train_leaves_following_empty(make_plugin):
     result, _, _ = fetch(make_plugin, ok(connection("08:14", 0, "4"), connection("08:20", vias=True)))
     d = result.data

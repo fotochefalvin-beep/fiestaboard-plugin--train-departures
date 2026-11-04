@@ -78,10 +78,10 @@ def format_delay(seconds: int) -> str:
 
 
 def format_platform(platform: str) -> str:
-    platform = (platform or "").strip()
-    if not platform or platform == "?":
+    text = board_text(platform, limit=MAX_LEN - 1)
+    if not text or text == "?":
         return ""
-    return board_text(f"P{platform}")
+    return f"P{text}"
 
 
 def local_zone() -> ZoneInfo:
