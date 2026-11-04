@@ -1,0 +1,6 @@
+{
+ "exception": "RequestedStopNotFoundException",
+ "message": "Invalid request, value 'BE.NMBS.008800000' for parameter 'to' is invalid: Requested stop not found: BE.NMBS.008800000",
+ "at": "JourneyPlanningV1Controller.java:209",
+ "stackTrace": []
+}

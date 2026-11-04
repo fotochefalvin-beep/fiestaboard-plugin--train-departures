@@ -1,0 +1,6 @@
+{
+ "exception": "JourneyPlanNotFoundException",
+ "message": "Journey planner did not return any result",
+ "at": "NmbsRivRawDataRepository.java:398",
+ "stackTrace": []
+}

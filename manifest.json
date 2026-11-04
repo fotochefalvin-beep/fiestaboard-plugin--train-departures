@@ -1,0 +1,158 @@
+{
+  "id": "train_departures",
+  "name": "Train Departures",
+  "version": "0.1.0",
+  "description": "The next direct NMBS/SNCB train on your route with its delay and platform (08:14 +12 P4), plus the one after, live from iRail.",
+  "author": "Alvin To",
+  "icon": "train-front",
+  "category": "transit",
+  "repository": "https://github.com/fotochefalvin-beep/fiestaboard-plugin--train-departures",
+  "documentation": "README.md",
+  "min_refresh_seconds": 30,
+  "settings_schema": {
+    "type": "object",
+    "properties": {
+      "enabled": {
+        "type": "boolean",
+        "title": "Enabled",
+        "default": false
+      },
+      "from_station": {
+        "type": "string",
+        "title": "From station",
+        "description": "Where you board. Pick from the list or type an iRail station name in Dutch, French, English or German (e.g. Gent-Sint-Pieters).",
+        "ui:widget": "remote-options",
+        "ui:options": {
+          "options_id": "stations",
+          "server_search": true,
+          "cache_seconds": 3600,
+          "placeholder": "Search a station"
+        }
+      },
+      "to_station": {
+        "type": "string",
+        "title": "To station",
+        "description": "Where you get off. Only direct trains (no transfers) are shown.",
+        "ui:widget": "remote-options",
+        "ui:options": {
+          "options_id": "to_stations",
+          "server_search": true,
+          "cache_seconds": 3600,
+          "placeholder": "Search a station"
+        }
+      },
+      "from_label": {
+        "type": "string",
+        "title": "From label",
+        "description": "Short board name for the from station (e.g. GENT). Empty: the station's name, cut to 15 characters.",
+        "default": ""
+      },
+      "to_label": {
+        "type": "string",
+        "title": "To label",
+        "description": "Short board name for the to station (e.g. BRUSSEL-C). Empty: the station's name, cut to 15 characters.",
+        "default": ""
+      },
+      "refresh_seconds": {
+        "type": "integer",
+        "title": "Refresh Interval (seconds)",
+        "description": "How often to ask iRail for new times (minimum 30 seconds).",
+        "default": 60,
+        "minimum": 30
+      }
+    },
+    "required": [
+      "from_station",
+      "to_station"
+    ]
+  },
+  "variables": {
+    "groups": {
+      "route": {
+        "label": "Route"
+      },
+      "next_train": {
+        "label": "Next train"
+      },
+      "following_train": {
+        "label": "Following train"
+      }
+    },
+    "simple": {
+      "status": {
+        "description": "OK, NO TRAIN DATA (iRail unreachable) or NO DIRECT TRAIN; the train fields are empty unless OK",
+        "type": "string",
+        "max_length": 15,
+        "group": "route",
+        "example": "OK"
+      },
+      "route": {
+        "description": "From and to label as FROM>TO, cut to 15",
+        "type": "string",
+        "max_length": 15,
+        "group": "route",
+        "example": "GENT>BRUSSEL-C"
+      },
+      "from_label": {
+        "description": "Board label of the from station (setting, else the station's name)",
+        "type": "string",
+        "max_length": 15,
+        "group": "route",
+        "example": "GENT"
+      },
+      "to_label": {
+        "description": "Board label of the to station (setting, else the station's name)",
+        "type": "string",
+        "max_length": 15,
+        "group": "route",
+        "example": "BRUSSEL-C"
+      },
+      "time": {
+        "description": "Scheduled departure (HH:MM, local time) of the next direct train that has not left",
+        "type": "string",
+        "max_length": 15,
+        "group": "next_train",
+        "example": "08:14"
+      },
+      "delay": {
+        "description": "Delay of that train in whole minutes (+12); empty when on time",
+        "type": "string",
+        "max_length": 15,
+        "group": "next_train",
+        "example": "+12"
+      },
+      "platform": {
+        "description": "Departure platform of that train (P4); empty when unknown",
+        "type": "string",
+        "max_length": 15,
+        "group": "next_train",
+        "example": "P4"
+      },
+      "next_time": {
+        "description": "Scheduled departure of the following direct train; empty if none",
+        "type": "string",
+        "max_length": 15,
+        "group": "following_train",
+        "example": "08:44"
+      },
+      "next_delay": {
+        "description": "Delay of the following train (+3); empty when on time or none",
+        "type": "string",
+        "max_length": 15,
+        "group": "following_train",
+        "example": "+3"
+      }
+    }
+  },
+  "max_lengths": {
+    "status": 15,
+    "route": 15,
+    "from_label": 15,
+    "to_label": 15,
+    "time": 15,
+    "delay": 15,
+    "platform": 15,
+    "next_time": 15,
+    "next_delay": 15
+  }
+}

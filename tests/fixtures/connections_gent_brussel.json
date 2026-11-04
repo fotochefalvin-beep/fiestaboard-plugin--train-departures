@@ -1,0 +1,250 @@
+{
+ "version": "1.4",
+ "timestamp": "1793799182",
+ "connection": [
+  {
+   "id": "0",
+   "departure": {
+    "delay": "0",
+    "station": "Ghent-Sint-Pieters",
+    "stationinfo": {
+     "@id": "http://irail.be/stations/NMBS/008892007",
+     "id": "BE.NMBS.008892007",
+     "name": "Ghent-Sint-Pieters",
+     "locationX": "3.710675",
+     "locationY": "51.035896",
+     "standardname": "Gent-Sint-Pieters"
+    },
+    "time": "1793799660",
+    "vehicle": "BE.NMBS.IC2813",
+    "platform": "10",
+    "platforminfo": {
+     "name": "10",
+     "normal": "1"
+    },
+    "canceled": "0",
+    "departureConnection": "http://irail.be/connections/8892007/20261104/IC2813",
+    "direction": {
+     "name": "Liège-Guillemins"
+    },
+    "left": "0",
+    "walking": "0"
+   },
+   "arrival": {
+    "delay": "0",
+    "station": "Brussels-Central",
+    "time": "1793801820",
+    "vehicle": "BE.NMBS.IC2813",
+    "platform": "1",
+    "canceled": "0",
+    "arrived": "0"
+   },
+   "duration": "2160"
+  },
+  {
+   "id": "1",
+   "departure": {
+    "delay": "0",
+    "station": "Ghent-Sint-Pieters",
+    "stationinfo": {
+     "@id": "http://irail.be/stations/NMBS/008892007",
+     "id": "BE.NMBS.008892007",
+     "name": "Ghent-Sint-Pieters",
+     "locationX": "3.710675",
+     "locationY": "51.035896",
+     "standardname": "Gent-Sint-Pieters"
+    },
+    "time": "1793800560",
+    "vehicle": "BE.NMBS.IC414",
+    "platform": "9",
+    "platforminfo": {
+     "name": "9",
+     "normal": "1"
+    },
+    "canceled": "0",
+    "departureConnection": "http://irail.be/connections/8892007/20261104/IC414",
+    "direction": {
+     "name": "Welkenraedt"
+    },
+    "left": "0",
+    "walking": "0"
+   },
+   "arrival": {
+    "delay": "0",
+    "station": "Brussels-Central",
+    "time": "1793802720",
+    "vehicle": "BE.NMBS.IC414",
+    "platform": "1",
+    "canceled": "0",
+    "arrived": "0"
+   },
+   "duration": "2160"
+  },
+  {
+   "id": "2",
+   "departure": {
+    "delay": "0",
+    "station": "Ghent-Sint-Pieters",
+    "stationinfo": {
+     "@id": "http://irail.be/stations/NMBS/008892007",
+     "id": "BE.NMBS.008892007",
+     "name": "Ghent-Sint-Pieters",
+     "locationX": "3.710675",
+     "locationY": "51.035896",
+     "standardname": "Gent-Sint-Pieters"
+    },
+    "time": "1793800800",
+    "vehicle": "BE.NMBS.IC1514",
+    "platform": "11",
+    "platforminfo": {
+     "name": "11",
+     "normal": "1"
+    },
+    "canceled": "0",
+    "departureConnection": "http://irail.be/connections/8892007/20261104/IC1514",
+    "direction": {
+     "name": "Leuven"
+    },
+    "left": "0",
+    "walking": "0"
+   },
+   "arrival": {
+    "delay": "0",
+    "station": "Brussels-Central",
+    "time": "1793803020",
+    "vehicle": "BE.NMBS.IC3414",
+    "platform": "5",
+    "canceled": "0",
+    "arrived": "0"
+   },
+   "duration": "2220",
+   "vias": {
+    "number": "1",
+    "via": [
+     {
+      "id": "0",
+      "station": "Brussels-South/Brussels-Midi",
+      "vehicle": "BE.NMBS.IC3414"
+     }
+    ]
+   }
+  },
+  {
+   "id": "3",
+   "departure": {
+    "delay": "0",
+    "station": "Ghent-Sint-Pieters",
+    "stationinfo": {
+     "@id": "http://irail.be/stations/NMBS/008892007",
+     "id": "BE.NMBS.008892007",
+     "name": "Ghent-Sint-Pieters",
+     "locationX": "3.710675",
+     "locationY": "51.035896",
+     "standardname": "Gent-Sint-Pieters"
+    },
+    "time": "1793800800",
+    "vehicle": "BE.NMBS.IC1514",
+    "platform": "11",
+    "platforminfo": {
+     "name": "11",
+     "normal": "1"
+    },
+    "canceled": "0",
+    "departureConnection": "http://irail.be/connections/8892007/20261104/IC1514",
+    "direction": {
+     "name": "Leuven"
+    },
+    "left": "0",
+    "walking": "0"
+   },
+   "arrival": {
+    "delay": "0",
+    "station": "Brussels-Central",
+    "time": "1793803200",
+    "vehicle": "BE.NMBS.IC1514",
+    "platform": "1",
+    "canceled": "0",
+    "arrived": "0"
+   },
+   "duration": "2400"
+  },
+  {
+   "id": "4",
+   "departure": {
+    "delay": "0",
+    "station": "Ghent-Sint-Pieters",
+    "stationinfo": {
+     "@id": "http://irail.be/stations/NMBS/008892007",
+     "id": "BE.NMBS.008892007",
+     "name": "Ghent-Sint-Pieters",
+     "locationX": "3.710675",
+     "locationY": "51.035896",
+     "standardname": "Gent-Sint-Pieters"
+    },
+    "time": "1793802300",
+    "vehicle": "BE.NMBS.IC514",
+    "platform": "10",
+    "platforminfo": {
+     "name": "10",
+     "normal": "1"
+    },
+    "canceled": "0",
+    "departureConnection": "http://irail.be/connections/8892007/20261104/IC514",
+    "direction": {
+     "name": "Eupen"
+    },
+    "left": "0",
+    "walking": "0"
+   },
+   "arrival": {
+    "delay": "0",
+    "station": "Brussels-Central",
+    "time": "1793804400",
+    "vehicle": "BE.NMBS.IC514",
+    "platform": "3",
+    "canceled": "0",
+    "arrived": "0"
+   },
+   "duration": "2100"
+  },
+  {
+   "id": "5",
+   "departure": {
+    "delay": "0",
+    "station": "Ghent-Sint-Pieters",
+    "stationinfo": {
+     "@id": "http://irail.be/stations/NMBS/008892007",
+     "id": "BE.NMBS.008892007",
+     "name": "Ghent-Sint-Pieters",
+     "locationX": "3.710675",
+     "locationY": "51.035896",
+     "standardname": "Gent-Sint-Pieters"
+    },
+    "time": "1793803260",
+    "vehicle": "BE.NMBS.IC2814",
+    "platform": "10",
+    "platforminfo": {
+     "name": "10",
+     "normal": "1"
+    },
+    "canceled": "0",
+    "departureConnection": "http://irail.be/connections/8892007/20261104/IC2814",
+    "direction": {
+     "name": "Liège-Guillemins"
+    },
+    "left": "0",
+    "walking": "0"
+   },
+   "arrival": {
+    "delay": "0",
+    "station": "Brussels-Central",
+    "time": "1793805420",
+    "vehicle": "BE.NMBS.IC2814",
+    "platform": "1",
+    "canceled": "0",
+    "arrived": "0"
+   },
+   "duration": "2160"
+  }
+ ]
+}
