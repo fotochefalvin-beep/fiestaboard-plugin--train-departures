@@ -12,6 +12,7 @@ journey) is an empty list, not a failure.
 """
 
 import logging
+import re
 from dataclasses import dataclass
 from typing import Any, List, Optional, Tuple
 
@@ -61,10 +62,27 @@ class Connection:
     vehicle: str
     direct: bool
     destination: str = ""  # the train's final stop (``direction.name``), in the request language
+    train_type: str = ""  # category: IC, P, L, S1, EC ... (``vehicleinfo.type``)
 
 
 def _flag(value: Any) -> bool:
     return str(value).strip().lower() in ("1", "true")
+
+
+def _train_type(departure: dict) -> str:
+    """``vehicleinfo.type`` (``S1``), else the leading letters of the vehicle id.
+
+    The id fallback cannot tell ``S1 1790`` from ``S11 790`` (both are
+    ``BE.NMBS.S11790``), so an S-train without ``vehicleinfo`` shows ``S``.
+    """
+    info = departure.get("vehicleinfo")
+    if isinstance(info, dict):
+        kind = str(info.get("type") or "").strip()
+        if kind:
+            return kind
+    vehicle = str(departure.get("vehicle") or "").rsplit(".", 1)[-1]
+    match = re.match(r"[A-Za-z]+", vehicle)
+    return match.group(0) if match else ""
 
 
 def _destination(departure: dict) -> str:
@@ -86,6 +104,7 @@ def parse_connection(item: dict) -> Connection:
         vehicle=str(departure.get("vehicle") or ""),
         direct="vias" not in item,
         destination=_destination(departure),
+        train_type=_train_type(departure),
     )
 
 

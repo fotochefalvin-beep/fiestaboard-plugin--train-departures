@@ -1,8 +1,8 @@
 {
   "id": "train_departures",
   "name": "Train Departures",
-  "version": "0.3.0",
-  "description": "The next direct NMBS/SNCB train on your route with its delay, platform and final destination (08:14 +12 P4), plus the one after, live from iRail.",
+  "version": "0.4.0",
+  "description": "The next direct NMBS/SNCB train on your route with its delay, platform, train type and final destination (08:14 IC +12 P4), plus the one after, live from iRail.",
   "author": "Alvin To",
   "icon": "train-front",
   "category": "transit",
@@ -154,6 +154,13 @@
         "group": "next_train",
         "example": "P4"
       },
+      "type": {
+        "description": "Train type of that train (IC, P, L, S1, EC ...); empty when iRail gives none",
+        "type": "string",
+        "max_length": 15,
+        "group": "next_train",
+        "example": "IC"
+      },
       "destination": {
         "description": "Final destination of that train, in the Language setting, cut to 15; empty when iRail gives none",
         "type": "string",
@@ -175,6 +182,13 @@
         "group": "following_train",
         "example": "+3"
       },
+      "next_type": {
+        "description": "Train type of the following train; empty when unknown or none",
+        "type": "string",
+        "max_length": 15,
+        "group": "following_train",
+        "example": "L"
+      },
       "next_destination": {
         "description": "Final destination of the following train; empty when unknown or none",
         "type": "string",
@@ -192,9 +206,11 @@
     "time": 15,
     "delay": 15,
     "platform": 15,
+    "type": 15,
     "destination": 15,
     "next_time": 15,
     "next_delay": 15,
+    "next_type": 15,
     "next_destination": 15
   }
 }

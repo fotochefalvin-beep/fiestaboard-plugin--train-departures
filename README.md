@@ -1,14 +1,15 @@
 # Train Departures
 
 A [FiestaBoard](https://github.com/Fiestaboard/FiestaBoard) plugin that shows
-the next direct NMBS/SNCB train on your route, with its delay, platform and
-final destination, plus the train after it. Times come from [iRail](https://api.irail.be)
-`/connections` (free, no key) and are refreshed all day.
+the next direct NMBS/SNCB train on your route, with its delay, platform,
+train type and final destination, plus the train after it. Times come from
+[iRail](https://api.irail.be) `/connections` (free, no key) and are refreshed
+all day.
 
 ```
-08:14 +12   P4
+08:14 IC +12 P4
 EUPEN
-NEXT 08:44
+NEXT 08:44 L
 ```
 
 ## How it picks the train
@@ -73,9 +74,11 @@ Every value is upper-case ASCII, accents stripped, at most 15 characters
 | `time` | scheduled departure, local `HH:MM`, of the next train you can still catch | `08:14` |
 | `delay` | `+N` whole minutes; empty when on time | `+12` |
 | `platform` | `P` + platform; empty when unknown | `P4` |
+| `type` | train type from iRail (`IC`, `P`, `L`, `S1`, `EC` …); empty when iRail gives none | `IC` |
 | `destination` | where that train ends (iRail's direction, in the `language` setting), cut to 15; empty when iRail gives none | `EUPEN` |
 | `next_time` | scheduled departure of the following direct train; empty if none | `08:44` |
 | `next_delay` | as `delay`, for the following train | `+3` |
+| `next_type` | as `type`, for the following train | `L` |
 | `next_destination` | as `destination`, for the following train | `WELKENRAEDT` |
 
 Times are scheduled times in FiestaBoard's general timezone. A fresh
@@ -87,10 +90,18 @@ shown.
 ### Example Note layout
 
 ```
-{{train_departures.time}} {{train_departures.delay}}   {{train_departures.platform}}
+{{train_departures.time}} {{train_departures.type}} {{train_departures.delay}} {{train_departures.platform}}
 {{train_departures.destination}}
-NEXT {{train_departures.next_time}}
+NEXT {{train_departures.next_time}} {{train_departures.next_type}}
 ```
+
+The first row is exactly 15 characters with a two-letter type and a
+two-digit delay (`08:14 IC +12 P4`); with a three-letter type such as `S10`
+or `EXT`, or a delay of 100 minutes or more, drop a field from that row.
+An empty field leaves its spaces, so an on-time train shows `08:14 IC  P4`.
+Without iRail's `vehicleinfo` an S-train shows a bare `S`.
+The type only tells you which train it is: trains are never picked or
+skipped by type.
 
 The destination is what the station display and platform announcements use to
 name the train. Swap it for `{{train_departures.route}}` if you prefer to see

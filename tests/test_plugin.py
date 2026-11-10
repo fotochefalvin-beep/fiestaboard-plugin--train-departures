@@ -14,7 +14,10 @@ from .conftest import (
     load_fixture,
 )
 
-TRAIN_FIELDS = ("time", "delay", "platform", "destination", "next_time", "next_delay", "next_destination")
+TRAIN_FIELDS = (
+    "time", "delay", "platform", "type", "destination",
+    "next_time", "next_delay", "next_type", "next_destination",
+)
 
 
 def ok(*connections):
@@ -80,6 +83,78 @@ def test_recorded_answer_skips_the_via_duplicate(make_plugin, now_holder):
     assert (d["status"], d["time"], d["delay"], d["platform"]) == ("OK", "14:41", "", "P10")
     assert d["next_time"] == "14:56"
     assert (d["destination"], d["next_destination"]) == ("LIEGE-GUILLEMIN", "WELKENRAEDT")
+
+
+# train type ---------------------------------------------------------------------
+
+
+def test_recorded_answer_with_vehicleinfo_gives_s1_and_ic(make_plugin, now_holder):
+    answer = load_fixture("connections_mechelen_brussel_noord.json")
+    now_holder["now"] = int(answer["timestamp"])
+    result, _, _ = fetch(make_plugin, FakeResponse(200, answer))
+    d = result.data
+    assert (d["status"], d["type"], d["delay"], d["platform"]) == ("OK", "S1", "+6", "P4")
+    assert d["next_type"] == "IC"
+
+
+def with_type(item, kind):
+    item["departure"]["vehicleinfo"] = {"name": item["departure"]["vehicle"], "type": kind}
+    return item
+
+
+def test_type_comes_from_vehicleinfo_for_both_trains(make_plugin):
+    first = with_type(connection("08:14", vehicle="BE.NMBS.S11790"), "S1")
+    second = with_type(connection("08:44", vehicle="BE.NMBS.P7305"), "p")
+    result, _, _ = fetch(make_plugin, ok(first, second))
+    assert (result.data["type"], result.data["next_type"]) == ("S1", "P")
+
+
+@pytest.mark.parametrize(
+    "vehicle, info, expected",
+    [
+        ("BE.NMBS.IC2813", None, "IC"),  # recorded answers before vehicleinfo
+        ("BE.NMBS.L4567", "not a dict", "L"),
+        ("BE.NMBS.S11790", {"type": ""}, "S"),  # the id cannot tell S1 from S11
+        ("BE.NMBS.EXT1234", {"type": None}, "EXT"),
+        ("BE.NMBS.12345", None, ""),
+        ("", None, ""),
+    ],
+)
+def test_type_falls_back_to_the_vehicle_id(vehicle, info, expected):
+    from plugins.train_departures import irail
+
+    item = connection("08:14")
+    item["departure"]["vehicle"] = vehicle
+    item["departure"].pop("vehicleinfo", None)
+    if info is not None:
+        item["departure"]["vehicleinfo"] = info
+    assert irail.parse_connection(item).train_type == expected
+
+
+def test_type_follows_the_reordered_trains_and_never_picks_them(make_plugin):
+    late_ic = with_type(connection("08:14", 35), "IC")
+    on_time_l = with_type(connection("08:44"), "L")
+    result, _, _ = fetch(make_plugin, ok(late_ic, on_time_l))
+    d = result.data
+    assert (d["time"], d["type"]) == ("08:44", "L")
+    assert (d["next_time"], d["next_type"]) == ("08:14", "IC")
+
+
+def test_one_direct_train_leaves_next_type_empty(make_plugin):
+    result, _, _ = fetch(make_plugin, ok(with_type(connection("08:14"), "IC"), connection("08:20", vias=True)))
+    assert (result.data["type"], result.data["next_type"]) == ("IC", "")
+
+
+def test_type_is_board_text_cut_to_15():
+    from plugins.train_departures import board_text
+
+    assert board_text(" eurostar  thalys express ") == "EUROSTAR THALYS"
+
+
+def test_no_train_data_empties_the_types(make_plugin):
+    result, _, _ = fetch(make_plugin, requests.Timeout())
+    assert result.data["status"] == "NO TRAIN DATA"
+    assert (result.data["type"], result.data["next_type"]) == ("", "")
 
 
 # destination --------------------------------------------------------------------

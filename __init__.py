@@ -3,14 +3,14 @@
 Every refresh reads iRail ``/connections`` for the configured from/to
 stations and shows the next direct train that can still be caught (it has
 not left, and the walk to the station still fits before it does), with its
-delay, platform and final destination, plus the train after it. Stations are checked and
-searched offline against a bundled iRail ``/stations`` snapshot
+delay, platform, train type and final destination, plus the train after it.
+Stations are checked and searched offline against a bundled iRail ``/stations`` snapshot
 (``stations.json``), so saving settings never touches the network.
 
 Variables (all upper-case ASCII, at most 15 characters, for a 3 x 15 Note):
 ``status``, ``route``, ``from_label``, ``to_label``, ``time``, ``delay``,
-``platform``, ``destination``, ``next_time``, ``next_delay``,
-``next_destination``.
+``platform``, ``type``, ``destination``, ``next_time``, ``next_delay``,
+``next_type``, ``next_destination``.
 """
 
 from __future__ import annotations
@@ -48,7 +48,10 @@ STATUS_OK = "OK"
 STATUS_NO_DATA = "NO TRAIN DATA"
 STATUS_NO_DIRECT = "NO DIRECT TRAIN"
 
-TRAIN_FIELDS = ("time", "delay", "platform", "destination", "next_time", "next_delay", "next_destination")
+TRAIN_FIELDS = (
+    "time", "delay", "platform", "type", "destination",
+    "next_time", "next_delay", "next_type", "next_destination",
+)
 STATION_FIELDS = (("from_station", "From station"), ("to_station", "To station"))
 
 
@@ -263,6 +266,7 @@ class Plugin(PluginBase):
             time=hhmm(first),
             delay=format_delay(first.delay),
             platform=format_platform(first.platform),
+            type=board_text(first.train_type),
             destination=board_text(first.destination),
         )
         if len(trains) > 1:
@@ -270,6 +274,7 @@ class Plugin(PluginBase):
             data.update(
                 next_time=hhmm(second),
                 next_delay=format_delay(second.delay),
+                next_type=board_text(second.train_type),
                 next_destination=board_text(second.destination),
             )
         return PluginResult(available=True, data=data)

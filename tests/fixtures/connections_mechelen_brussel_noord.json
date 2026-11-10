@@ -1,0 +1,836 @@
+{
+ "version": "1.4",
+ "timestamp": "1794334841",
+ "connection": [
+  {
+   "id": "0",
+   "departure": {
+    "delay": "360",
+    "station": "Mechelen",
+    "stationinfo": {
+     "@id": "http://irail.be/stations/NMBS/008822004",
+     "id": "BE.NMBS.008822004",
+     "name": "Mechelen",
+     "locationX": "4.482785",
+     "locationY": "51.017648",
+     "standardname": "Mechelen"
+    },
+    "time": "1794334680",
+    "vehicle": "BE.NMBS.S11790",
+    "vehicleinfo": {
+     "name": "BE.NMBS.S11790",
+     "shortname": "S1 1790",
+     "number": "1790",
+     "type": "S1",
+     "locationX": "0",
+     "locationY": "0",
+     "@id": "http://irail.be/vehicle/S11790"
+    },
+    "platform": "4",
+    "platforminfo": {
+     "name": "4",
+     "normal": "1"
+    },
+    "canceled": "0",
+    "stops": {
+     "number": "5",
+     "stop": [
+      {
+       "id": "0",
+       "station": "Weerde",
+       "stationinfo": {
+        "@id": "http://irail.be/stations/NMBS/008822251",
+        "id": "BE.NMBS.008822251",
+        "name": "Weerde",
+        "locationX": "4.470937",
+        "locationY": "50.977449",
+        "standardname": "Weerde"
+       },
+       "scheduledArrivalTime": "1794335040",
+       "arrivalCanceled": "0",
+       "scheduledDepartureTime": "1794335040",
+       "arrivalDelay": "240",
+       "departureDelay": "240",
+       "departureCanceled": "0",
+       "left": "0",
+       "arrived": "0",
+       "isExtraStop": "0",
+       "platform": "?",
+       "platforminfo": {
+        "name": "?",
+        "normal": "1"
+       }
+      },
+      {
+       "id": "1",
+       "station": "Eppegem",
+       "stationinfo": {
+        "@id": "http://irail.be/stations/NMBS/008822269",
+        "id": "BE.NMBS.008822269",
+        "name": "Eppegem",
+        "locationX": "4.45749",
+        "locationY": "50.9584",
+        "standardname": "Eppegem"
+       },
+       "scheduledArrivalTime": "1794335220",
+       "arrivalCanceled": "0",
+       "scheduledDepartureTime": "1794335220",
+       "arrivalDelay": "240",
+       "departureDelay": "240",
+       "departureCanceled": "0",
+       "left": "0",
+       "arrived": "0",
+       "isExtraStop": "0",
+       "platform": "?",
+       "platforminfo": {
+        "name": "?",
+        "normal": "1"
+       }
+      },
+      {
+       "id": "2",
+       "station": "Vilvoorde",
+       "stationinfo": {
+        "@id": "http://irail.be/stations/NMBS/008811189",
+        "id": "BE.NMBS.008811189",
+        "name": "Vilvoorde",
+        "locationX": "4.432823",
+        "locationY": "50.924583",
+        "standardname": "Vilvoorde"
+       },
+       "scheduledArrivalTime": "1794335460",
+       "arrivalCanceled": "0",
+       "scheduledDepartureTime": "1794335520",
+       "arrivalDelay": "180",
+       "departureDelay": "180",
+       "departureCanceled": "0",
+       "left": "0",
+       "arrived": "0",
+       "isExtraStop": "0",
+       "platform": "?",
+       "platforminfo": {
+        "name": "?",
+        "normal": "1"
+       }
+      },
+      {
+       "id": "3",
+       "station": "Buda",
+       "stationinfo": {
+        "@id": "http://irail.be/stations/NMBS/008811148",
+        "id": "BE.NMBS.008811148",
+        "name": "Buda",
+        "locationX": "4.417074",
+        "locationY": "50.907495",
+        "standardname": "Buda"
+       },
+       "scheduledArrivalTime": "1794335760",
+       "arrivalCanceled": "0",
+       "scheduledDepartureTime": "1794335760",
+       "arrivalDelay": "120",
+       "departureDelay": "120",
+       "departureCanceled": "0",
+       "left": "0",
+       "arrived": "0",
+       "isExtraStop": "0",
+       "platform": "?",
+       "platforminfo": {
+        "name": "?",
+        "normal": "1"
+       }
+      },
+      {
+       "id": "4",
+       "station": "Schaarbeek",
+       "stationinfo": {
+        "@id": "http://irail.be/stations/NMBS/008811007",
+        "id": "BE.NMBS.008811007",
+        "name": "Schaarbeek",
+        "locationX": "4.378636",
+        "locationY": "50.878513",
+        "standardname": "Schaarbeek/Schaerbeek"
+       },
+       "scheduledArrivalTime": "1794336000",
+       "arrivalCanceled": "0",
+       "scheduledDepartureTime": "1794336060",
+       "arrivalDelay": "120",
+       "departureDelay": "120",
+       "departureCanceled": "0",
+       "left": "0",
+       "arrived": "0",
+       "isExtraStop": "0",
+       "platform": "?",
+       "platforminfo": {
+        "name": "?",
+        "normal": "1"
+       }
+      }
+     ]
+    },
+    "departureConnection": "http://irail.be/connections/8822004/20261110/S11790",
+    "direction": {
+     "name": "Nijvel"
+    },
+    "left": "0",
+    "walking": "0",
+    "occupancy": {
+     "@id": "http://api.irail.be/terms/low",
+     "name": "low"
+    }
+   },
+   "arrival": {
+    "delay": "0",
+    "station": "Brussel-Noord",
+    "stationinfo": {
+     "@id": "http://irail.be/stations/NMBS/008812005",
+     "id": "BE.NMBS.008812005",
+     "name": "Brussel-Noord",
+     "locationX": "4.360846",
+     "locationY": "50.859663",
+     "standardname": "Brussel-Noord/Bruxelles-Nord"
+    },
+    "time": "1794336300",
+    "vehicle": "BE.NMBS.S11790",
+    "vehicleinfo": {
+     "name": "BE.NMBS.S11790",
+     "shortname": "S1 1790",
+     "number": "1790",
+     "type": "S1",
+     "locationX": "0",
+     "locationY": "0",
+     "@id": "http://irail.be/vehicle/S11790"
+    },
+    "platform": "12",
+    "platforminfo": {
+     "name": "12",
+     "normal": "1"
+    },
+    "canceled": "0",
+    "direction": {
+     "name": "Nijvel"
+    },
+    "arrived": "0",
+    "walking": "0",
+    "departureConnection": "http://irail.be/connections/8812005/20261110/S11790"
+   },
+   "duration": "1260",
+   "remarks": {
+    "number": "0",
+    "remark": []
+   },
+   "alerts": {
+    "number": "0",
+    "alert": []
+   }
+  },
+  {
+   "id": "1",
+   "departure": {
+    "delay": "0",
+    "station": "Mechelen",
+    "stationinfo": {
+     "@id": "http://irail.be/stations/NMBS/008822004",
+     "id": "BE.NMBS.008822004",
+     "name": "Mechelen",
+     "locationX": "4.482785",
+     "locationY": "51.017648",
+     "standardname": "Mechelen"
+    },
+    "time": "1794335580",
+    "vehicle": "BE.NMBS.IC3140",
+    "vehicleinfo": {
+     "name": "BE.NMBS.IC3140",
+     "shortname": "IC 3140",
+     "number": "3140",
+     "type": "IC",
+     "locationX": "0",
+     "locationY": "0",
+     "@id": "http://irail.be/vehicle/IC3140"
+    },
+    "platform": "12",
+    "platforminfo": {
+     "name": "12",
+     "normal": "1"
+    },
+    "canceled": "0",
+    "stops": {
+     "number": "1",
+     "stop": [
+      {
+       "id": "0",
+       "station": "Vilvoorde",
+       "stationinfo": {
+        "@id": "http://irail.be/stations/NMBS/008811189",
+        "id": "BE.NMBS.008811189",
+        "name": "Vilvoorde",
+        "locationX": "4.432823",
+        "locationY": "50.924583",
+        "standardname": "Vilvoorde"
+       },
+       "scheduledArrivalTime": "1794336120",
+       "arrivalCanceled": "0",
+       "scheduledDepartureTime": "1794336180",
+       "arrivalDelay": "0",
+       "departureDelay": "0",
+       "departureCanceled": "0",
+       "left": "0",
+       "arrived": "0",
+       "isExtraStop": "0",
+       "platform": "?",
+       "platforminfo": {
+        "name": "?",
+        "normal": "1"
+       }
+      }
+     ]
+    },
+    "departureConnection": "http://irail.be/connections/8822004/20261110/IC3140",
+    "direction": {
+     "name": "Brussel-Zuid"
+    },
+    "left": "0",
+    "walking": "0",
+    "occupancy": {
+     "@id": "http://api.irail.be/terms/low",
+     "name": "low"
+    }
+   },
+   "arrival": {
+    "delay": "0",
+    "station": "Brussel-Noord",
+    "stationinfo": {
+     "@id": "http://irail.be/stations/NMBS/008812005",
+     "id": "BE.NMBS.008812005",
+     "name": "Brussel-Noord",
+     "locationX": "4.360846",
+     "locationY": "50.859663",
+     "standardname": "Brussel-Noord/Bruxelles-Nord"
+    },
+    "time": "1794336660",
+    "vehicle": "BE.NMBS.IC3140",
+    "vehicleinfo": {
+     "name": "BE.NMBS.IC3140",
+     "shortname": "IC 3140",
+     "number": "3140",
+     "type": "IC",
+     "locationX": "0",
+     "locationY": "0",
+     "@id": "http://irail.be/vehicle/IC3140"
+    },
+    "platform": "12",
+    "platforminfo": {
+     "name": "12",
+     "normal": "1"
+    },
+    "canceled": "0",
+    "direction": {
+     "name": "Brussel-Zuid"
+    },
+    "arrived": "0",
+    "walking": "0",
+    "departureConnection": "http://irail.be/connections/8812005/20261110/IC3140"
+   },
+   "duration": "1080",
+   "remarks": {
+    "number": "0",
+    "remark": []
+   },
+   "alerts": {
+    "number": "0",
+    "alert": []
+   }
+  },
+  {
+   "id": "2",
+   "departure": {
+    "delay": "0",
+    "station": "Mechelen",
+    "stationinfo": {
+     "@id": "http://irail.be/stations/NMBS/008822004",
+     "id": "BE.NMBS.008822004",
+     "name": "Mechelen",
+     "locationX": "4.482785",
+     "locationY": "51.017648",
+     "standardname": "Mechelen"
+    },
+    "time": "1794336300",
+    "vehicle": "BE.NMBS.IC2041",
+    "vehicleinfo": {
+     "name": "BE.NMBS.IC2041",
+     "shortname": "IC 2041",
+     "number": "2041",
+     "type": "IC",
+     "locationX": "0",
+     "locationY": "0",
+     "@id": "http://irail.be/vehicle/IC2041"
+    },
+    "platform": "11",
+    "platforminfo": {
+     "name": "11",
+     "normal": "1"
+    },
+    "canceled": "0",
+    "stops": {
+     "number": "0",
+     "stop": []
+    },
+    "departureConnection": "http://irail.be/connections/8822004/20261110/IC2041",
+    "direction": {
+     "name": "Charleroi-Centraal"
+    },
+    "left": "0",
+    "walking": "0",
+    "occupancy": {
+     "@id": "http://api.irail.be/terms/low",
+     "name": "low"
+    }
+   },
+   "arrival": {
+    "delay": "0",
+    "station": "Brussel-Noord",
+    "stationinfo": {
+     "@id": "http://irail.be/stations/NMBS/008812005",
+     "id": "BE.NMBS.008812005",
+     "name": "Brussel-Noord",
+     "locationX": "4.360846",
+     "locationY": "50.859663",
+     "standardname": "Brussel-Noord/Bruxelles-Nord"
+    },
+    "time": "1794337200",
+    "vehicle": "BE.NMBS.IC2041",
+    "vehicleinfo": {
+     "name": "BE.NMBS.IC2041",
+     "shortname": "IC 2041",
+     "number": "2041",
+     "type": "IC",
+     "locationX": "0",
+     "locationY": "0",
+     "@id": "http://irail.be/vehicle/IC2041"
+    },
+    "platform": "12",
+    "platforminfo": {
+     "name": "12",
+     "normal": "1"
+    },
+    "canceled": "0",
+    "direction": {
+     "name": "Charleroi-Centraal"
+    },
+    "arrived": "0",
+    "walking": "0",
+    "departureConnection": "http://irail.be/connections/8812005/20261110/IC2041"
+   },
+   "duration": "900",
+   "remarks": {
+    "number": "0",
+    "remark": []
+   },
+   "alerts": {
+    "number": "0",
+    "alert": []
+   }
+  },
+  {
+   "id": "3",
+   "departure": {
+    "delay": "0",
+    "station": "Mechelen",
+    "stationinfo": {
+     "@id": "http://irail.be/stations/NMBS/008822004",
+     "id": "BE.NMBS.008822004",
+     "name": "Mechelen",
+     "locationX": "4.482785",
+     "locationY": "51.017648",
+     "standardname": "Mechelen"
+    },
+    "time": "1794336420",
+    "vehicle": "BE.NMBS.S11991",
+    "vehicleinfo": {
+     "name": "BE.NMBS.S11991",
+     "shortname": "S1 1991",
+     "number": "1991",
+     "type": "S1",
+     "locationX": "0",
+     "locationY": "0",
+     "@id": "http://irail.be/vehicle/S11991"
+    },
+    "platform": "4",
+    "platforminfo": {
+     "name": "4",
+     "normal": "1"
+    },
+    "canceled": "0",
+    "stops": {
+     "number": "4",
+     "stop": [
+      {
+       "id": "0",
+       "station": "Weerde",
+       "stationinfo": {
+        "@id": "http://irail.be/stations/NMBS/008822251",
+        "id": "BE.NMBS.008822251",
+        "name": "Weerde",
+        "locationX": "4.470937",
+        "locationY": "50.977449",
+        "standardname": "Weerde"
+       },
+       "scheduledArrivalTime": "1794336780",
+       "arrivalCanceled": "0",
+       "scheduledDepartureTime": "1794336780",
+       "arrivalDelay": "-60",
+       "departureDelay": "0",
+       "departureCanceled": "0",
+       "left": "0",
+       "arrived": "0",
+       "isExtraStop": "0",
+       "platform": "?",
+       "platforminfo": {
+        "name": "?",
+        "normal": "1"
+       }
+      },
+      {
+       "id": "1",
+       "station": "Eppegem",
+       "stationinfo": {
+        "@id": "http://irail.be/stations/NMBS/008822269",
+        "id": "BE.NMBS.008822269",
+        "name": "Eppegem",
+        "locationX": "4.45749",
+        "locationY": "50.9584",
+        "standardname": "Eppegem"
+       },
+       "scheduledArrivalTime": "1794336960",
+       "arrivalCanceled": "0",
+       "scheduledDepartureTime": "1794336960",
+       "arrivalDelay": "0",
+       "departureDelay": "0",
+       "departureCanceled": "0",
+       "left": "0",
+       "arrived": "0",
+       "isExtraStop": "0",
+       "platform": "?",
+       "platforminfo": {
+        "name": "?",
+        "normal": "1"
+       }
+      },
+      {
+       "id": "2",
+       "station": "Vilvoorde",
+       "stationinfo": {
+        "@id": "http://irail.be/stations/NMBS/008811189",
+        "id": "BE.NMBS.008811189",
+        "name": "Vilvoorde",
+        "locationX": "4.432823",
+        "locationY": "50.924583",
+        "standardname": "Vilvoorde"
+       },
+       "scheduledArrivalTime": "1794337200",
+       "arrivalCanceled": "0",
+       "scheduledDepartureTime": "1794337260",
+       "arrivalDelay": "0",
+       "departureDelay": "0",
+       "departureCanceled": "0",
+       "left": "0",
+       "arrived": "0",
+       "isExtraStop": "0",
+       "platform": "?",
+       "platforminfo": {
+        "name": "?",
+        "normal": "1"
+       }
+      },
+      {
+       "id": "3",
+       "station": "Schaarbeek",
+       "stationinfo": {
+        "@id": "http://irail.be/stations/NMBS/008811007",
+        "id": "BE.NMBS.008811007",
+        "name": "Schaarbeek",
+        "locationX": "4.378636",
+        "locationY": "50.878513",
+        "standardname": "Schaarbeek/Schaerbeek"
+       },
+       "scheduledArrivalTime": "1794337620",
+       "arrivalCanceled": "0",
+       "scheduledDepartureTime": "1794337680",
+       "arrivalDelay": "0",
+       "departureDelay": "0",
+       "departureCanceled": "0",
+       "left": "0",
+       "arrived": "0",
+       "isExtraStop": "0",
+       "platform": "?",
+       "platforminfo": {
+        "name": "?",
+        "normal": "1"
+       }
+      }
+     ]
+    },
+    "departureConnection": "http://irail.be/connections/8822004/20261110/S11991",
+    "direction": {
+     "name": "Nijvel"
+    },
+    "left": "0",
+    "walking": "0",
+    "occupancy": {
+     "@id": "http://api.irail.be/terms/low",
+     "name": "low"
+    }
+   },
+   "arrival": {
+    "delay": "0",
+    "station": "Brussel-Noord",
+    "stationinfo": {
+     "@id": "http://irail.be/stations/NMBS/008812005",
+     "id": "BE.NMBS.008812005",
+     "name": "Brussel-Noord",
+     "locationX": "4.360846",
+     "locationY": "50.859663",
+     "standardname": "Brussel-Noord/Bruxelles-Nord"
+    },
+    "time": "1794337860",
+    "vehicle": "BE.NMBS.S11991",
+    "vehicleinfo": {
+     "name": "BE.NMBS.S11991",
+     "shortname": "S1 1991",
+     "number": "1991",
+     "type": "S1",
+     "locationX": "0",
+     "locationY": "0",
+     "@id": "http://irail.be/vehicle/S11991"
+    },
+    "platform": "12",
+    "platforminfo": {
+     "name": "12",
+     "normal": "1"
+    },
+    "canceled": "0",
+    "direction": {
+     "name": "Nijvel"
+    },
+    "arrived": "0",
+    "walking": "0",
+    "departureConnection": "http://irail.be/connections/8812005/20261110/S11991"
+   },
+   "duration": "1440",
+   "remarks": {
+    "number": "0",
+    "remark": []
+   },
+   "alerts": {
+    "number": "0",
+    "alert": []
+   }
+  },
+  {
+   "id": "4",
+   "departure": {
+    "delay": "0",
+    "station": "Mechelen",
+    "stationinfo": {
+     "@id": "http://irail.be/stations/NMBS/008822004",
+     "id": "BE.NMBS.008822004",
+     "name": "Mechelen",
+     "locationX": "4.482785",
+     "locationY": "51.017648",
+     "standardname": "Mechelen"
+    },
+    "time": "1794337080",
+    "vehicle": "BE.NMBS.IC3441",
+    "vehicleinfo": {
+     "name": "BE.NMBS.IC3441",
+     "shortname": "IC 3441",
+     "number": "3441",
+     "type": "IC",
+     "locationX": "0",
+     "locationY": "0",
+     "@id": "http://irail.be/vehicle/IC3441"
+    },
+    "platform": "12",
+    "platforminfo": {
+     "name": "12",
+     "normal": "1"
+    },
+    "canceled": "0",
+    "stops": {
+     "number": "1",
+     "stop": [
+      {
+       "id": "0",
+       "station": "Vilvoorde",
+       "stationinfo": {
+        "@id": "http://irail.be/stations/NMBS/008811189",
+        "id": "BE.NMBS.008811189",
+        "name": "Vilvoorde",
+        "locationX": "4.432823",
+        "locationY": "50.924583",
+        "standardname": "Vilvoorde"
+       },
+       "scheduledArrivalTime": "1794337620",
+       "arrivalCanceled": "0",
+       "scheduledDepartureTime": "1794337680",
+       "arrivalDelay": "0",
+       "departureDelay": "0",
+       "departureCanceled": "0",
+       "left": "0",
+       "arrived": "0",
+       "isExtraStop": "0",
+       "platform": "?",
+       "platforminfo": {
+        "name": "?",
+        "normal": "1"
+       }
+      }
+     ]
+    },
+    "departureConnection": "http://irail.be/connections/8822004/20261110/IC3441",
+    "direction": {
+     "name": "Binche"
+    },
+    "left": "0",
+    "walking": "0",
+    "occupancy": {
+     "@id": "http://api.irail.be/terms/low",
+     "name": "low"
+    }
+   },
+   "arrival": {
+    "delay": "0",
+    "station": "Brussel-Noord",
+    "stationinfo": {
+     "@id": "http://irail.be/stations/NMBS/008812005",
+     "id": "BE.NMBS.008812005",
+     "name": "Brussel-Noord",
+     "locationX": "4.360846",
+     "locationY": "50.859663",
+     "standardname": "Brussel-Noord/Bruxelles-Nord"
+    },
+    "time": "1794338160",
+    "vehicle": "BE.NMBS.IC3441",
+    "vehicleinfo": {
+     "name": "BE.NMBS.IC3441",
+     "shortname": "IC 3441",
+     "number": "3441",
+     "type": "IC",
+     "locationX": "0",
+     "locationY": "0",
+     "@id": "http://irail.be/vehicle/IC3441"
+    },
+    "platform": "12",
+    "platforminfo": {
+     "name": "12",
+     "normal": "1"
+    },
+    "canceled": "0",
+    "direction": {
+     "name": "Binche"
+    },
+    "arrived": "0",
+    "walking": "0",
+    "departureConnection": "http://irail.be/connections/8812005/20261110/IC3441"
+   },
+   "duration": "1080",
+   "remarks": {
+    "number": "0",
+    "remark": []
+   },
+   "alerts": {
+    "number": "0",
+    "alert": []
+   }
+  },
+  {
+   "id": "5",
+   "departure": {
+    "delay": "0",
+    "station": "Mechelen",
+    "stationinfo": {
+     "@id": "http://irail.be/stations/NMBS/008822004",
+     "id": "BE.NMBS.008822004",
+     "name": "Mechelen",
+     "locationX": "4.482785",
+     "locationY": "51.017648",
+     "standardname": "Mechelen"
+    },
+    "time": "1794338040",
+    "vehicle": "BE.NMBS.IC4541",
+    "vehicleinfo": {
+     "name": "BE.NMBS.IC4541",
+     "shortname": "IC 4541",
+     "number": "4541",
+     "type": "IC",
+     "locationX": "0",
+     "locationY": "0",
+     "@id": "http://irail.be/vehicle/IC4541"
+    },
+    "platform": "11",
+    "platforminfo": {
+     "name": "11",
+     "normal": "1"
+    },
+    "canceled": "0",
+    "stops": {
+     "number": "0",
+     "stop": []
+    },
+    "departureConnection": "http://irail.be/connections/8822004/20261110/IC4541",
+    "direction": {
+     "name": "Charleroi-Centraal"
+    },
+    "left": "0",
+    "walking": "0",
+    "occupancy": {
+     "@id": "http://api.irail.be/terms/low",
+     "name": "low"
+    }
+   },
+   "arrival": {
+    "delay": "0",
+    "station": "Brussel-Noord",
+    "stationinfo": {
+     "@id": "http://irail.be/stations/NMBS/008812005",
+     "id": "BE.NMBS.008812005",
+     "name": "Brussel-Noord",
+     "locationX": "4.360846",
+     "locationY": "50.859663",
+     "standardname": "Brussel-Noord/Bruxelles-Nord"
+    },
+    "time": "1794338940",
+    "vehicle": "BE.NMBS.IC4541",
+    "vehicleinfo": {
+     "name": "BE.NMBS.IC4541",
+     "shortname": "IC 4541",
+     "number": "4541",
+     "type": "IC",
+     "locationX": "0",
+     "locationY": "0",
+     "@id": "http://irail.be/vehicle/IC4541"
+    },
+    "platform": "12",
+    "platforminfo": {
+     "name": "12",
+     "normal": "1"
+    },
+    "canceled": "0",
+    "direction": {
+     "name": "Charleroi-Centraal"
+    },
+    "arrived": "0",
+    "walking": "0",
+    "departureConnection": "http://irail.be/connections/8812005/20261110/IC4541"
+   },
+   "duration": "900",
+   "remarks": {
+    "number": "0",
+    "remark": []
+   },
+   "alerts": {
+    "number": "0",
+    "alert": []
+   }
+  }
+ ]
+}

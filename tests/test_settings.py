@@ -193,13 +193,15 @@ def test_manifest_is_valid_for_the_host(manifest):
     assert ok, errors
 
 
-def test_manifest_declares_eleven_variables_of_15(manifest):
+def test_manifest_declares_thirteen_variables_of_15(manifest):
     simple = manifest["variables"]["simple"]
     assert set(simple) == {
-        "status", "route", "from_label", "to_label", "time", "delay", "platform", "destination",
-        "next_time", "next_delay", "next_destination",
+        "status", "route", "from_label", "to_label", "time", "delay", "platform", "type", "destination",
+        "next_time", "next_delay", "next_type", "next_destination",
     }
     assert simple["destination"]["group"] == "next_train"
+    assert simple["type"]["group"] == "next_train"
+    assert simple["next_type"]["group"] == "following_train"
     assert simple["next_destination"]["group"] == "following_train"
     assert all(v["max_length"] == 15 for v in simple.values())
     assert manifest["max_lengths"] == {k: 15 for k in simple}
@@ -213,7 +215,7 @@ def test_manifest_declares_eleven_variables_of_15(manifest):
     walk = props["walk_minutes"]
     assert (walk["type"], walk["default"], walk["minimum"], walk["maximum"]) == ("integer", 0, 0, 60)
     assert "walk_minutes" not in manifest["settings_schema"]["required"]
-    assert manifest["version"] == "0.3.0"
+    assert manifest["version"] == "0.4.0"
     for key in ("from_station", "to_station"):
         assert props[key]["ui:widget"] == "remote-options"
         assert props[key]["ui:options"]["server_search"] is True
